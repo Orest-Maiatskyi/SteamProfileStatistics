@@ -1,0 +1,300 @@
+
+:root {
+    --main-bg-color: #1e2430;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    font-family: 'Calibri';
+}
+
+body {
+    background-color: var(--main-bg-color);
+    overflow: hidden;
+}
+
+.bg-img-cont {
+    z-index: -1;
+    filter: blur(4px);
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    width: calc(100% + 20px);
+    height: calc(100vh + 20px);
+}
+
+.bg-img-cont:before {
+    content: '';
+    background-color: #000;
+    opacity: 0.6;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.bg-img-cont .img {
+    width: 100%;
+    height: calc(100vh + 20px);
+    background-image: url('../img/bg.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+main {
+    overflow-y: scroll;
+    width: 100%;
+    height: 100vh;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+  
+/* Track */
+::-webkit-scrollbar-track {
+    background: #121212;
+}
+  
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #424242;
+    border: 3px solid #121212;
+    border-radius: 5px;
+}
+
+.root-cont {
+    width: 100%;
+    max-width: 1500px;
+    margin: 0 auto;
+}
+
+.base-ifo .title {
+    display: block;
+    margin: 40px;
+}
+
+.base-ifo .title, p {
+    color: #fff;
+    font-family: "Archivo Black", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 50px;
+}
+
+.base-ifo .title p {
+    font-size: 35px;
+    color: #ADD8E6;
+}
+
+.base-ifo .main-cont {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.base-ifo .main-cont .cont {
+    position: relative;
+    display: flex;
+    width: 30%;
+    min-width: 300px;
+    height: 200px;
+    float: left;
+    margin: calc(10% / 6);
+}
+
+.base-ifo .main-cont .cont:before {
+    z-index: -1;
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    opacity: 0.2;
+}
+
+.base-ifo .main-cont .cont span {
+    color: #fff;
+    font-size: 30px;
+    text-align: center;
+    margin: auto;
+}
+
+.base-ifo .main-cont .cont span p {
+    font-size: 80px;
+}
+
+.most-played-title {
+    text-align: center;
+}
+
+.most-played-title p {
+    font-size: 30px;
+}
+
+.most-played-main-cont {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.most-played-main-cont .cont {
+    width: 300px;
+}
+
+.most-played-main-cont .cont img {
+    display: block;
+    width: 280px;
+    margin: 10px;
+    transition-duration: 0.5s;
+}
+
+.most-played-main-cont .cont img:hover {
+    width: 300px;
+    margin: 0px;
+}
+
+.most-played-main-cont .cont span {
+    display: block;
+    text-align: center;
+    width: 100px;
+    border-radius: 2px;
+    color: #333;
+    background-color: #ccc;
+    font-size: 25px;
+    position: relative;
+    top: -26px;
+    left: 100px;
+}
+
+.all-games-stat-cont {
+    width: 100%;
+}
+
+.all-games-stat-cont .title {
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+    color: #fff;
+    font-family: "Archivo Black", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 30px;
+}
+
+.all-games-cont {
+    width: 100%;
+    height: 500px;
+    background-color: #1e2430;
+    margin-top: 20px;
+}
+
+.all-games-cont .tools-cont {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100%;
+    height: 60px;
+    background-color: #141820;
+}
+
+.all-games-cont .tools-cont input {
+    border: 0px;
+    outline: none;
+    width: 250px;
+    height: 40px;
+    background-color: #1D3557;
+    color: #fff;
+    font-family: 'Calibri';
+    font-size: 20px;
+    margin: 10px;
+    padding: 0px 5px;
+}
+
+.all-games-cont .tools-cont .pagination {
+    height: 40px;
+    background-color: #1D3557;
+    color: #fff;
+    font-family: 'Calibri';
+    font-size: 16px;
+    margin: 10px;
+    padding: 0px 5px;
+    display: flex;
+    align-items: center;
+}
+
+.all-games-cont .tools-cont .pagination a {
+    display: block;
+    width: 25px;
+    height: 25px;
+    background-color: #141820;
+    margin: 5px;
+    font-family: 'Archivo Black';
+    text-align: center;
+    line-height: 25px;
+    cursor: pointer;
+}
+
+.all-games-cont .games-cont {
+
+}
+
+/* COLLAPSIBLE */
+
+.collapsible {
+    position: relative;
+    background-color: #141820;
+    color: white;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+}
+  
+.active, .collapsible:hover {
+    background-color: #1D3557;
+}
+  
+.collapsible:after {
+    position: absolute;
+    top: calc(50% - 8px);
+    right: 20px;
+    content: '\002B';
+    color: white;
+    font-weight: bold;
+    margin-left: 5px;
+}
+  
+.active:after {
+    content: "\2212";
+}
+  
+.content {
+    padding: 0 18px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+    background-color: #141820;
+}
+
+.collapsible ul {
+    display: flex;
+    align-items: center;
+}
+
+.collapsible ul li {
+    display: inline-block;
+    margin: 0px 10px;
+    font-family: 'Calibri';
+    font-size: 20px;
+}
+

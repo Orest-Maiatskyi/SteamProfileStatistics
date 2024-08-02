@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>{{ account_name }}'s statistics</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/statistics.css') }}">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <div class="bg-img-cont"><div class="img"></div></div>
+        <main>
+            <div class="root-cont">
+                <div class="base-ifo">
+                    <span class="title">
+                        <p>{{ account_name }}'s</p>
+                        STEAM STATISTICS
+                    </span>
+                    <div class="main-cont">
+                        <div class="cont">
+                            <span>
+                                <p>{{ games_num }}</p>
+                                Games
+                            </span>
+                        </div>
+                        <div class="cont">
+                            <span>
+                                <p id="completedAchievementsNum">...</p>
+                                Achievements
+                            </span>
+                        </div>
+                        <div class="cont">
+                            <span>
+                                <p>{{ play_time_all }}+</p>
+                                Game Hours
+                            </span>
+                        </div>
+                    </div>
+                    <span class="most-played-title">
+                        <p>Most Played Games</p>
+                        <p style="font-size: 25px; font-family: 'Calibri';">BY % OF PLAYTIME</p>
+                    </span>
+                    <div class="most-played-main-cont">
+                        {% for game in most_played_games %}
+                            <div class="cont">
+                                <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/{{ game['appid'] }}/hero_capsule.jpg">
+                            <span>{{ smart_round(float_num=(game['playtime_forever'] // 60) / play_time_all * 100) }}%</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="all-games-stat-cont">
+                    <span class="title">Games Statistics</span>
+                    <div class="all-games-cont">
+                        <div class="tools-cont">
+                            <input id="searchInput" type="text" placeholder="Search game..." oninput="search()">
+                            <div class="pagination" id="pagination">
+                                <a><<</a>
+                                <a><</a>
+                            </div>
+                        </div>
+                        <div class="games-cont" id="gamesCont">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <script src="{{ url_for('static', filename='js/statistics.js') }}" async defer></script>
+        <script>
+            // COLLAPSIBLE
+
+            function collapsible() {
+                var coll = document.getElementsByClassName("collapsible");
+                var i;
+
+                for (i = 0; i < coll.length; i++) {
+                  coll[i].addEventListener("click", function() {
+                    this.classList.toggle("active");
+                    var content = this.nextElementSibling;
+                    if (content.style.maxHeight){
+                      content.style.maxHeight = null;
+                    } else {
+                      content.style.maxHeight = content.scrollHeight + "px";
+                    }
+                  });
+                }
+            }
+
+            const gamesPerPage = 10;
+            const currentPage = 1;
+            const games = {{ games|safe }};
+
+            const pagination = document.getElementById('pagination');
+            const gamesCont = document.getElementById('gamesCont');
+
+            function loadPagination() {
+                for (let i = 1; i < games.length / gamesPerPage; i++) {
+                    let a = document.createElement('a');
+                    a.innerHTML = i;
+                    pagination.appendChild(a);
+                }
+                let a = document.createElement('a');
+                a.innerHTML = '>';
+                pagination.appendChild(a);
+                a = document.createElement('a');
+                a.innerHTML = '>>';
+                pagination.appendChild(a);
+            }
+
+            loadPagination();
+
+
+            function loadPaginatedGames() {
+                gamesCont.innerHTML = '';
+                let currentGames = games.slice(currentPage * gamesPerPage, currentPage * gamesPerPage + 10);
+                for (let i = 0; i < currentGames.length; i++) {
+                    gamesCont.innerHTML += `
+                        <button class="collapsible">
+                                <ul>
+                                    <li><img src="https://cdn.cloudflare.steamstatic.com/steam/apps/${currentGames[i]['appid']}/capsule_231x87.jpg"></li>
+                                    <li>${currentGames[i]['name']}</li>
+                                    <li>Hours played - ${Math.floor(currentGames[i]['playtime_forever'] / 60)}</li>
+                                </ul>
+                            </button>
+                            <div class="content">
+                                ewgewgegeg
+                            </div>
+                    `;
+                }
+                collapsible();
+            }
+
+            loadPaginatedGames();
+
+            const searchInput = document.getElementById('searchInput');
+
+            function search() {
+                let searchText = searchInput.value;
+
+                if (searchText.length == 0) {
+                    loadPaginatedGames();
+                } else {
+
+                    let coincidences = [];
+                    for (let i = 0; i < games.length; i++) {
+                        coincidences.push(
+                            [[...games[i]['name'].matchAll(new RegExp(searchText, 'gi'))].map(a => a.index).length, games[i]]
+                        );
+                    }
+                    coincidences.sort();
+                    coincidences.reverse();
+
+                    for (let i = 0; i < coincidences.length; i++) {
+                        if (coincidences[i][0] == 0) {
+                            coincidences = coincidences.slice(0, i);
+                            break;
+                        }
+                    }
+
+                    gamesCont.innerHTML = '';
+
+                    for (let i = 0; i < coincidences.length; i++) {
+                        gamesCont.innerHTML += `
+                            <button class="collapsible">
+                                    <ul>
+                                        <li><img src="https://cdn.cloudflare.steamstatic.com/steam/apps/${coincidences[i][1]['appid']}/capsule_231x87.jpg"></li>
+                                        <li>${coincidences[i][1]['name']}</li>
+                                        <li>Hours played - ${Math.floor(coincidences[i][1]['playtime_forever'] / 60)}</li>
+                                    </ul>
+                                </button>
+                                <div class="content">
+                                    ewgewgegeg
+                                </div>
+                        `;
+                    }
+                    collapsible();
+                }
+            }
+
+        </script>
+    </body>
+</html>

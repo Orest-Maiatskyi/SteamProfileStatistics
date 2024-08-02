@@ -1,0 +1,1 @@
+from .get_completed_achievements_num import get_completed_achievements_num as get_completed_achievements_num_route
